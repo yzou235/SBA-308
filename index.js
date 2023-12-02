@@ -15,7 +15,7 @@ const AssignmentGroup = {
         id: 1,
         name: "Declare a Variable",
         due_at: "2023-01-25",
-        points_possible: 0
+        points_possible: 50
         },
         {
         id: 2,
@@ -160,6 +160,17 @@ let flattenLearnerSubmissions = flattenSubmissions(LearnerSubmissions);
 let adjustedLearnerSubmissions = adjustLateSubmissions(assignmentDue, flattenLearnerSubmissions);
 console.log(adjustedLearnerSubmissions);
 
+// Create a function to filter out submissions in `LearnerSubmissions` where the assignment is not due yet.
+
+function filterLearnerSubmissions(agdue, submissions) {
+
+    const assignmentIds = agdue.map(assignment => assignment.id);
+    
+    return submissions.filter(submission => assignmentIds.includes(submission.assignment_id));
+}
+
+let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentDue, adjustedLearnerSubmissions);
+console.log(filteredLearnerSubmissions);
 
 
 
@@ -171,7 +182,7 @@ function getLearnerData(course, ag, submissions) {
     try {
         if (course.id === ag.course_id) {
             
-            let assignmentsDue = getAssignmentsDue(ag);
+            let assignmentsDue = getAssignmentsDue(ag); // only keep the assignments that are due
 
             // try/catch for assignment possible point being 0
 
@@ -180,7 +191,15 @@ function getLearnerData(course, ag, submissions) {
                     if (assignment.points_possible === 0) {
                         throw new Error (`Error: points_possible cannot be zero for assignment ${assignment.id}.`);
                     } else {
-                        return true;
+
+                        let flattenLearnerSubmissions = flattenSubmissions(submissions);
+
+                        let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentDue, flattenLearnerSubmissions) // filter out submissions where the assignment is not due yet
+
+                        let adjustedLearnerSubmissions = adjustLateSubmissions(filteredLearnerSubmissions); // adjust the score of late submission
+
+
+
                     }
                 });
             } catch (error) {
