@@ -113,7 +113,7 @@ function getAssignmentsDue(ag) {
 
 }
 
-console.log(getAssignmentsDue(AssignmentGroup))
+// console.log(getAssignmentsDue(AssignmentGroup))
 
 // Create a function to deduct 10% of the total possible points from their score for late submission.
 
@@ -144,10 +144,10 @@ function adjustLateSubmissions(agdue, submissions) {
     return adjustedSubmissions;
   }
 
-let assignmentDue = getAssignmentsDue(AssignmentGroup);
-let flattenLearnerSubmissions = flattenSubmissions(LearnerSubmissions);
-let adjustedLearnerSubmissions = adjustLateSubmissions(assignmentDue, flattenLearnerSubmissions);
-console.log(adjustedLearnerSubmissions);
+// let assignmentDue = getAssignmentsDue(AssignmentGroup);
+// let flattenLearnerSubmissions = flattenSubmissions(LearnerSubmissions);
+// let adjustedLearnerSubmissions = adjustLateSubmissions(assignmentDue, flattenLearnerSubmissions);
+// console.log(adjustedLearnerSubmissions);
 
 // Create a function to filter out submissions in `LearnerSubmissions` where the assignment is not due yet.
 
@@ -158,8 +158,8 @@ function filterLearnerSubmissions(agdue, submissions) {
     return submissions.filter(submission => assignmentIds.includes(submission.assignment_id));
 }
 
-let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentDue, adjustedLearnerSubmissions);
-console.log(filteredLearnerSubmissions);
+// let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentDue, adjustedLearnerSubmissions);
+// console.log(filteredLearnerSubmissions);
 
 // Create a function to calculate the total possible points
 
@@ -171,13 +171,13 @@ function calcTotalPossiblePoints(agdue) {
 
 }
 
-let totalPossiblePoints = calcTotalPossiblePoints(assignmentDue);
-console.log(totalPossiblePoints);
+// let totalPossiblePoints = calcTotalPossiblePoints(assignmentDue);
+// console.log(totalPossiblePoints);
 
-console.log("assignmentDue:")
-console.log(assignmentDue);
-console.log("filteredLearnerSubmissions")
-console.log(filteredLearnerSubmissions);
+// console.log("assignmentDue:")
+// console.log(assignmentDue);
+// console.log("filteredLearnerSubmissions")
+// console.log(filteredLearnerSubmissions);
 
 // Create a function to calculate the average score for each learner.
 
@@ -214,8 +214,8 @@ function calcAverageScores(submissions, totalPossiblePoints) {
 
 }
 
-let LearnerAvg = calcAverageScores(filteredLearnerSubmissions, totalPossiblePoints);
-console.log(LearnerAvg);
+// let LearnerAvg = calcAverageScores(filteredLearnerSubmissions, totalPossiblePoints);
+// console.log(LearnerAvg);
 
 // Create a function that joins the possible points to each submission in the `LearnerSubmission`
 
@@ -235,9 +235,9 @@ function joinPointsPossibleToSubmissions(submissions, agdue) {
     });
 }
 
-let joinedLearnerSubmissions = joinPointsPossibleToSubmissions(filteredLearnerSubmissions, assignmentDue);
-console.log("After Join:")
-console.log(joinedLearnerSubmissions);
+// let joinedLearnerSubmissions = joinPointsPossibleToSubmissions(filteredLearnerSubmissions, assignmentDue);
+// console.log("After Join:")
+// console.log(joinedLearnerSubmissions);
 
 // Create a function to calculate the percentage score of each assignment for each submission
 
@@ -250,8 +250,8 @@ function calcPctScore(submissions) {
     });
 }
 
-let wtPctScoreLearnerSubmissions = calcPctScore(joinedLearnerSubmissions);
-console.log(wtPctScoreLearnerSubmissions);
+// let wtPctScoreLearnerSubmissions = calcPctScore(joinedLearnerSubmissions);
+// console.log(wtPctScoreLearnerSubmissions);
 
 // Create a function to group submissions by learner. For each assignment, the property would be `assignment_id: pct_score`.
 
@@ -267,64 +267,98 @@ function groupPctScores(submissions) {
             result[learner_id] = {learner_id};
         }
 
-        result[learner_id][assignment_id] = pct_score;
+        const num_assignment_id = parseInt(assignment_id);
+
+        result[learner_id][num_assignment_id] = pct_score;
     });
 
     return Object.values(result);
 
 }
 
-let LearnerPct = groupPctScores(wtPctScoreLearnerSubmissions);
-console.log("with pct scores:");
-console.log(LearnerPct);
+// let LearnerPct = groupPctScores(wtPctScoreLearnerSubmissions);
+// console.log("with pct scores:");
+// console.log(LearnerPct);
 
 // Now we have LearnerAvg and LearnerPct.
 // Create a function to join LeanerAvg and LearnerPct together to get the final result
 
+function joinArray(a1, a2) {
+    const a3 = a1.map(item1 => ({
+        ...item1,
+        ...a2.find(item2 => item2.learner_id === item1.learner_id)
+    }));
+    return a3;
+}
+
+// joinedLearnerScores = joinArray(LearnerPct, LearnerAvg);
+// console.log(joinedLearnerScores);
+
+/////////////////////////////////////////
+// The problem is, in the output, assignment_id (as a key) is a string and shows upfront. Don't know how to solve it :( //
+////////////////////////////////////////
+
+// Create a function for the try/catch for assignment points_possile being 0:
+function checkPointsPossible(ag) {
+    try {
+        ag.forEach(assignment => {
+            if (assignment.points_possible === 0) {
+                throw new Error(`Error: points_possible cannot be zero for assignment ${assignment.id}.`);
+            }
+        });
+        return true;
+    } catch (error) {
+        console.error(error.message);
+        return false;
+    }
+}
 
 
-
+///////////////////////////
+// Write the final function
 
 function getLearnerData(course, ag, submissions) {
-    
-    const result = [];
-    
+        
     // try/catch for course id mismatch
     try {
         if (course.id === ag.course_id) {
             
             const assignmentsDue = getAssignmentsDue(ag); // only keep the assignments that are due
 
-            // try/catch for assignment possible point being 0
-
-            try {
-                assignmentsDue.forEach(assignment => {
-                    if (assignment.points_possible === 0) {
-                        throw new Error (`Error: points_possible cannot be zero for assignment ${assignment.id}.`);
-                    } else {
-
-                        // Make all the necessary adjustments
-                        
-                        const flattenLearnerSubmissions = flattenSubmissions(submissions);
-
-                        const filteredLearnerSubmissions = filterLearnerSubmissions(assignmentsDue, flattenLearnerSubmissions) // filter out submissions where the assignment is not due yet
-
-                        const adjustedLearnerSubmissions = adjustLateSubmissions(filteredLearnerSubmissions); // adjust the score of late submission
-
-                        // Calculate the total possible points
-
-                        const totalPossiblePoints = calcTotalPossiblePoints(assignmentsDue);
-
-                        // Get an array of learners' average score
-
-                        const LearnerAvg = calcAverageScores(adjustedLearnerSubmissions, totalPossiblePoints);
-
-
-                    }
-                });
-            } catch (error) {
-                console.log(error.message);
+            // Check if any assignment has a points_possible = 0
+            if (assignmentsDue.some(assignment => assignment.points_possible === 0)) {
+                throw new Error("points_possible cannot be zero. Please check.");
             }
+
+            //Make all the necessary adjustments
+                    
+            const flattenLearnerSubmissions = flattenSubmissions(submissions);
+
+            const filteredLearnerSubmissions = filterLearnerSubmissions(assignmentsDue, flattenLearnerSubmissions) // filter out submissions where the assignment is not due yet
+
+            const adjustedLearnerSubmissions = adjustLateSubmissions(assignmentsDue, filteredLearnerSubmissions); // adjust the score of late submission
+
+            // Calculate the total possible points
+
+            const totalPossiblePoints = calcTotalPossiblePoints(assignmentsDue);
+
+            // Get an array of learners' average score
+
+            const LearnerAvg = calcAverageScores(adjustedLearnerSubmissions, totalPossiblePoints);
+
+            // Get an array of learner's percentage scores
+
+            const joinedLearnerSubmissions = joinPointsPossibleToSubmissions(adjustedLearnerSubmissions, assignmentsDue);
+
+            const wtPctScoreLearnerSubmissions = calcPctScore(joinedLearnerSubmissions);
+
+            const LearnerPct = groupPctScores(wtPctScoreLearnerSubmissions);
+
+            // Join LearnerAvg and LearnerPct to get the final result
+
+            const result = joinArray(LearnerAvg, LearnerPct);
+
+            return result;
 
         } else {
             throw "Error: Course ID Mismatch in AssignmentGroup. The provided assignment group doesn't belong to the provided course.";
