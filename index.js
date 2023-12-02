@@ -80,16 +80,34 @@ const LearnerSubmissions = [
 
 ////// My Answer Starts //////
 
-// Create a function to calculate the total possible points
+// Create a function to return an array of assignment objects that are already due
 
-function calcTotalPossiblePoints(ag) {
-    const result = ag.assignments.reduce((accumulator, assignment) => {
-        return accumulator + assignment.points_possible
-    }, 0)
-    return result;
+function getAssignmentsDue(ag) {
+
+    const currentDate = new Date();
+
+    return ag.assignments.filter(assignment => {
+        const dueDate = new Date(assignment.due_at);
+        return dueDate < currentDate
+    });
+
 }
 
-console.log(calcTotalPossiblePoints(AssignmentGroup));
+console.log(getAssignmentsDue(AssignmentGroup))
+
+// Create a function to calculate the total possible points
+
+function calcTotalPossiblePoints(agdue) {
+    
+    return result = agdue.reduce((accumulator, assignment) => {
+        return accumulator + assignment.points_possible
+    }, 0);
+
+}
+
+console.log(calcTotalPossiblePoints(getAssignmentsDue(AssignmentGroup)));
+
+// Create a function to calculate 
 
 function calcLearnerAvg(ag, submissions) {
     const result = 
