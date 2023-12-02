@@ -80,7 +80,28 @@ const LearnerSubmissions = [
 
 ////// My Answer Starts //////
 
-// Create a function to return an array of assignment objects that are already due
+// Create a function to flatten the objects in LearnerSubmissions array
+
+function flattenSubmissions(submissions) {
+    
+    return submissions.map(
+
+        ({learner_id, assignment_id, submission}) => ({
+
+            learner_id,
+            assignment_id,
+            submitted_at: submission.submitted_at,
+            score: submission.score
+
+        })
+
+    );
+
+}
+
+console.log(flattenSubmissions(LearnerSubmissions));
+
+// Create a function to return an array of assignment objects that are already due and also rename "id" to "assignment_id"
 
 function getAssignmentsDue(ag) {
 
@@ -107,11 +128,62 @@ function calcTotalPossiblePoints(agdue) {
 
 console.log(calcTotalPossiblePoints(getAssignmentsDue(AssignmentGroup)));
 
-// Create a function to calculate 
+// Create a function to deduct 10% of the total possible points from their score for late submission.
 
-function calcLearnerAvg(ag, submissions) {
-    const result = 
-}
+// function adjustLateSubmissions(agdue, learner_submissions) {
+//     const adjustedLearnerSubmissions = learner_submissions.map(learner_submission => {
+        
+//         const assignment = agdue.find(assignment => assignment.assignment_id === learner_submission.assignment_id);
+    
+//         if (assignment && learner_submission.submission.submitted_at > assignment.due_at) {
+            
+//             const latePenalty = Math.floor(assignment.points_possible * 0.1);
+
+//             const adjustedScore = Math.max(0, learner_submission.submission.score - latePenalty);
+        
+//             return {
+//                 ...learner_submission,
+//                submission: {
+//                 ...learner_submission.submission,
+//                 score: adjustedScore
+//                 }
+//             };
+//         }
+    
+//         return learner_submission;
+//     });
+    
+//     return adjustedLearnerSubmissions;
+//     }
+
+function adjustLateSubmissions(agdue, LearnerSubmissions) {
+    const adjustedLearnerSubmissions = LearnerSubmissions.map(submission => {
+        const assignment = agdue.find(assignment => assignment.assignment_id === submission.assignment_id);
+    
+        if (assignment && submission.submission.submitted_at > assignment.due_at) {
+        const latePenalty = Math.floor(assignment.points_possible * 0.1);
+        const adjustedScore = Math.max(0, submission.submission.score - latePenalty);
+    
+        return {
+            ...submission,
+            submission: {
+            ...submission.submission,
+            score: adjustedScore
+            }
+        };
+        }
+    
+        return submission;
+    });
+    
+    return adjustedLearnerSubmissions;
+    }
+    
+
+let assignmentDue = getAssignmentsDue(AssignmentGroup);
+console.log(adjustLateSubmissions(assignmentDue, LearnerSubmissions));
+
+
 
 
 function getLearnerData(course, ag, submissions) {
