@@ -1,3 +1,4 @@
+
 // The provided course information.
 const CourseInfo = {
     id: 451,
@@ -170,7 +171,51 @@ function calcTotalPossiblePoints(agdue) {
 
 }
 
-console.log(calcTotalPossiblePoints(getAssignmentsDue(AssignmentGroup)));
+let totalPossiblePoints = calcTotalPossiblePoints(assignmentDue);
+console.log(totalPossiblePoints);
+
+console.log("assignmentDue:")
+console.log(assignmentDue);
+console.log("filteredLearnerSubmissions")
+console.log(filteredLearnerSubmissions);
+
+// Create a function to calculate the average score for each learner.
+
+function calcAverageScores(submissions, totalPossiblePoints) {
+
+    // First create an object like this: {'learner_id': score}
+
+    const totalScores = {};
+
+    submissions.forEach(submission => {
+
+        const learner_id = submission.learner_id;
+        const score = submission.score;
+
+        if(!totalScores[learner_id]) {
+            totalScores[learner_id] = score;
+        } else {
+            totalScores[learner_id] += score;
+        }
+
+    });
+
+    // console.log(totalScores);
+
+    // Then convert this object to an array of objects
+    // actually... I got the answer from google but don't understand why use Object.keys here... Need to revisit it later.
+
+    const result = Object.keys(totalScores).map(learner_id => ({
+        learner_id: learner_id,
+        avg_score_: totalScores[learner_id] / totalPossiblePoints
+    }));
+
+    return result;
+
+}
+
+let LearnerAvg = calcAverageScores(filteredLearnerSubmissions, totalPossiblePoints);
+console.log(LearnerAvg);
 
 
 
@@ -194,7 +239,7 @@ function getLearnerData(course, ag, submissions) {
 
                         let flattenLearnerSubmissions = flattenSubmissions(submissions);
 
-                        let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentDue, flattenLearnerSubmissions) // filter out submissions where the assignment is not due yet
+                        let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentsDue, flattenLearnerSubmissions) // filter out submissions where the assignment is not due yet
 
                         let adjustedLearnerSubmissions = adjustLateSubmissions(filteredLearnerSubmissions); // adjust the score of late submission
 
