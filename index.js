@@ -253,7 +253,33 @@ function calcPctScore(submissions) {
 let wtPctScoreLearnerSubmissions = calcPctScore(joinedLearnerSubmissions);
 console.log(wtPctScoreLearnerSubmissions);
 
+// Create a function to group submissions by learner. For each assignment, the property would be `assignment_id: pct_score`.
 
+function groupPctScores(submissions) {
+    
+    const result = {};
+
+    submissions.forEach((submission) => {
+
+        const {learner_id, assignment_id, pct_score} = submission; // destructure the properties for later use.
+
+        if (!result[learner_id]) {
+            result[learner_id] = {learner_id};
+        }
+
+        result[learner_id][assignment_id] = pct_score;
+    });
+
+    return Object.values(result);
+
+}
+
+let LearnerPct = groupPctScores(wtPctScoreLearnerSubmissions);
+console.log("with pct scores:");
+console.log(LearnerPct);
+
+// Now we have LearnerAvg and LearnerPct.
+// Create a function to join LeanerAvg and LearnerPct together to get the final result
 
 
 
