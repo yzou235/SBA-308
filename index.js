@@ -227,7 +227,7 @@ function getLearnerData(course, ag, submissions) {
     try {
         if (course.id === ag.course_id) {
             
-            let assignmentsDue = getAssignmentsDue(ag); // only keep the assignments that are due
+            const assignmentsDue = getAssignmentsDue(ag); // only keep the assignments that are due
 
             // try/catch for assignment possible point being 0
 
@@ -237,12 +237,21 @@ function getLearnerData(course, ag, submissions) {
                         throw new Error (`Error: points_possible cannot be zero for assignment ${assignment.id}.`);
                     } else {
 
-                        let flattenLearnerSubmissions = flattenSubmissions(submissions);
+                        // Make all the necessary adjustments
+                        
+                        const flattenLearnerSubmissions = flattenSubmissions(submissions);
 
-                        let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentsDue, flattenLearnerSubmissions) // filter out submissions where the assignment is not due yet
+                        const filteredLearnerSubmissions = filterLearnerSubmissions(assignmentsDue, flattenLearnerSubmissions) // filter out submissions where the assignment is not due yet
 
-                        let adjustedLearnerSubmissions = adjustLateSubmissions(filteredLearnerSubmissions); // adjust the score of late submission
+                        const adjustedLearnerSubmissions = adjustLateSubmissions(filteredLearnerSubmissions); // adjust the score of late submission
 
+                        // Calculate the total possible points
+
+                        const totalPossiblePoints = calcTotalPossiblePoints(assignmentsDue);
+
+                        // Get an array of learners' average score
+
+                        const LearnerAvg = calcAverageScores(adjustedLearnerSubmissions, totalPossiblePoints);
 
 
                     }
