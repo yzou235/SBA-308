@@ -15,7 +15,7 @@ const AssignmentGroup = {
         id: 1,
         name: "Declare a Variable",
         due_at: "2023-01-25",
-        points_possible: 50
+        points_possible: 0
         },
         {
         id: 2,
@@ -118,7 +118,7 @@ console.log(getAssignmentsDue(AssignmentGroup))
 
 function calcTotalPossiblePoints(agdue) {
     
-    return result = agdue.reduce((accumulator, assignment) => {
+    return agdue.reduce((accumulator, assignment) => {
         return accumulator + assignment.points_possible
     }, 0);
 
@@ -134,6 +134,8 @@ function adjustLateSubmissions(agdue, submissions) {
         submission => {
 
             const assignment = agdue.find(assignment => assignment.id === submission.assignment_id);
+
+            // console.log(assignment);
     
             if (assignment && submission.submitted_at > assignment.due_at) {
 
@@ -165,9 +167,26 @@ function getLearnerData(course, ag, submissions) {
     
     const result = [];
     
+    // try/catch for course id mismatch
     try {
         if (course.id === ag.course_id) {
-            return true;
+            
+            let assignmentsDue = getAssignmentsDue(ag);
+
+            // try/catch for assignment possible point being 0
+
+            try {
+                assignmentsDue.forEach(assignment => {
+                    if (assignment.points_possible === 0) {
+                        throw new Error (`Error: points_possible cannot be zero for assignment ${assignment.id}.`);
+                    } else {
+                        return true;
+                    }
+                });
+            } catch (error) {
+                console.log(error.message);
+            }
+
         } else {
             throw "Error: Course ID Mismatch in AssignmentGroup. The provided assignment group doesn't belong to the provided course.";
         }
