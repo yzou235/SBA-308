@@ -206,7 +206,7 @@ function calcAverageScores(submissions, totalPossiblePoints) {
     // actually... I got the answer from google but don't understand why use Object.keys here... Need to revisit it later.
 
     const result = Object.keys(totalScores).map(learner_id => ({
-        learner_id: learner_id,
+        learner_id: parseInt(learner_id),
         avg_score_: totalScores[learner_id] / totalPossiblePoints
     }));
 
