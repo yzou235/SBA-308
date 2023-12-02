@@ -80,9 +80,26 @@ const LearnerSubmissions = [
 
 ////// My Answer Starts //////
 
-// a function that can calculate the average scores for each learner
+// Create a function to calculate the total possible points
+
+function calcTotalPossiblePoints(ag) {
+    const result = ag.assignments.reduce((accumulator, assignment) => {
+        return accumulator + assignment.points_possible
+    }, 0)
+    return result;
+}
+
+console.log(calcTotalPossiblePoints(AssignmentGroup));
+
+function calcLearnerAvg(ag, submissions) {
+    const result = 
+}
+
 
 function getLearnerData(course, ag, submissions) {
+    
+    const result = [];
+    
     try {
         if (course.id === ag.course_id) {
             return true;
@@ -95,7 +112,7 @@ function getLearnerData(course, ag, submissions) {
 }
 
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  console.log(result);
+console.log(result);
 
 
 
