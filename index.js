@@ -217,6 +217,34 @@ function calcAverageScores(submissions, totalPossiblePoints) {
 let LearnerAvg = calcAverageScores(filteredLearnerSubmissions, totalPossiblePoints);
 console.log(LearnerAvg);
 
+// Create a function that joins the possible points to each submission in the `LearnerSubmission`
+
+function joinPointsPossibleToSubmissions(submissions, agdue) {
+    return submissions.map(submission => {
+
+        const matchingAssignment = agdue.find(assignment => assignment.id === submission.assignment_id);
+
+        if(!matchingAssignment) {
+            submission.points_possible = 0;
+        } else {
+            submission.points_possible = matchingAssignment.points_possible
+        }
+
+        return submission;
+
+    });
+}
+
+let joinedLearnerSubmissions = joinPointsPossibleToSubmissions(flattenLearnerSubmissions, assignmentDue);
+console.log("After Join:")
+console.log(joinedLearnerSubmissions);
+
+// Create a function to calculate the percentage score of each assignment for each learner
+
+
+
+
+
 
 
 function getLearnerData(course, ag, submissions) {
