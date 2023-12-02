@@ -34,68 +34,95 @@ const AssignmentGroup = {
 
 // The provided learner submission data.
 const LearnerSubmissions = [
-{
-    learner_id: 125,
-    assignment_id: 1,
-    submission: {
-    submitted_at: "2023-01-25",
-    score: 47
-    }
-},
-{
-    learner_id: 125,
-    assignment_id: 2,
-    submission: {
-    submitted_at: "2023-02-12",
-    score: 150
-    }
-},
-{
-    learner_id: 125,
-    assignment_id: 3,
-    submission: {
-    submitted_at: "2023-01-25",
-    score: 400
-    }
-},
-{
-    learner_id: 132,
-    assignment_id: 1,
-    submission: {
-    submitted_at: "2023-01-24",
-    score: 39
-    }
-},
-{
-    learner_id: 132,
-    assignment_id: 2,
-    submission: {
-    submitted_at: "2023-03-07",
-    score: 140
-    }
-}
-];
-
-function getLearnerData(course, ag, submissions) {
-// here, we would process this data to achieve the desired result.
-const result = [
     {
-    id: 125,
-    avg: 0.985, // (47 + 150) / (50 + 150)
-    1: 0.94, // 47 / 50
-    2: 1.0 // 150 / 150
+        learner_id: 125,
+        assignment_id: 1,
+        submission: {
+        submitted_at: "2023-01-25",
+        score: 47
+        }
     },
     {
-    id: 132,
-    avg: 0.82, // (39 + 125) / (50 + 150)
-    1: 0.78, // 39 / 50
-    2: 0.833 // late: (140 - 15) / 150
+        learner_id: 125,
+        assignment_id: 2,
+        submission: {
+        submitted_at: "2023-02-12",
+        score: 150
+        }
+    },
+    {
+        learner_id: 125,
+        assignment_id: 3,
+        submission: {
+        submitted_at: "2023-01-25",
+        score: 400
+        }
+    },
+    {
+        learner_id: 132,
+        assignment_id: 1,
+        submission: {
+        submitted_at: "2023-01-24",
+        score: 39
+        }
+    },
+    {
+        learner_id: 132,
+        assignment_id: 2,
+        submission: {
+        submitted_at: "2023-03-07",
+        score: 140
+        }
     }
 ];
 
-return result;
+//////////////////////////////////////////////////////////
+
+////// My Answer Starts //////
+
+// a function that can calculate the average scores for each learner
+
+function getLearnerData(course, ag, submissions) {
+    try {
+        if (course.id === ag.course_id) {
+            return true;
+        } else {
+            throw "Error: Course ID Mismatch in AssignmentGroup. The provided assignment group doesn't belong to the provided course.";
+        }
+    } catch (error) {
+        return error;
+    }
 }
 
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+  console.log(result);
 
-console.log(result);
+
+
+
+
+// function getLearnerData(course, ag, submissions) {
+//     // here, we would process this data to achieve the desired result.
+//     const result = [
+//         {
+//         id: 125,
+//         avg: 0.985, // (47 + 150) / (50 + 150)
+//         1: 0.94, // 47 / 50
+//         2: 1.0 // 150 / 150
+//         },
+//         {
+//         id: 132,
+//         avg: 0.82, // (39 + 125) / (50 + 150)
+//         1: 0.78, // 39 / 50
+//         2: 0.833 // late: (140 - 15) / 150
+//         }
+//     ];
+
+//     return result;
+// }
+
+
+//////////////////////////////////////////////////////////
+// const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+
+// console.log(result);
