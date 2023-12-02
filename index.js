@@ -235,11 +235,23 @@ function joinPointsPossibleToSubmissions(submissions, agdue) {
     });
 }
 
-let joinedLearnerSubmissions = joinPointsPossibleToSubmissions(flattenLearnerSubmissions, assignmentDue);
+let joinedLearnerSubmissions = joinPointsPossibleToSubmissions(filteredLearnerSubmissions, assignmentDue);
 console.log("After Join:")
 console.log(joinedLearnerSubmissions);
 
-// Create a function to calculate the percentage score of each assignment for each learner
+// Create a function to calculate the percentage score of each assignment for each submission
+
+function calcPctScore(submissions) {
+    
+    return submissions.map(submission => {
+        const percentage = submission.score / submission.points_possible;
+        const pct_score = Number(percentage.toFixed(3));
+        return {...submission, pct_score};
+    });
+}
+
+let wtPctScoreLearnerSubmissions = calcPctScore(joinedLearnerSubmissions);
+console.log(wtPctScoreLearnerSubmissions);
 
 
 
