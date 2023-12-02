@@ -114,18 +114,6 @@ function getAssignmentsDue(ag) {
 
 console.log(getAssignmentsDue(AssignmentGroup))
 
-// Create a function to calculate the total possible points
-
-function calcTotalPossiblePoints(agdue) {
-    
-    return agdue.reduce((accumulator, assignment) => {
-        return accumulator + assignment.points_possible
-    }, 0);
-
-}
-
-console.log(calcTotalPossiblePoints(getAssignmentsDue(AssignmentGroup)));
-
 // Create a function to deduct 10% of the total possible points from their score for late submission.
 
 function adjustLateSubmissions(agdue, submissions) {
@@ -171,6 +159,18 @@ function filterLearnerSubmissions(agdue, submissions) {
 
 let filteredLearnerSubmissions = filterLearnerSubmissions(assignmentDue, adjustedLearnerSubmissions);
 console.log(filteredLearnerSubmissions);
+
+// Create a function to calculate the total possible points
+
+function calcTotalPossiblePoints(agdue) {
+    
+    return agdue.reduce((accumulator, assignment) => {
+        return accumulator + assignment.points_possible
+    }, 0);
+
+}
+
+console.log(calcTotalPossiblePoints(getAssignmentsDue(AssignmentGroup)));
 
 
 
