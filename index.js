@@ -165,9 +165,20 @@ function filterLearnerSubmissions(agdue, submissions) {
 
 function calcTotalPossiblePoints(agdue) {
     
-    return agdue.reduce((accumulator, assignment) => {
-        return accumulator + assignment.points_possible
-    }, 0);
+    let totalPossiblePoints = 0;
+
+    for (let i = 0; i < agdue.length; i++) {
+        
+        if(agdue[i].points_possible < 0) {
+            console.error(`Error: Negative points_possible found for assignment ${agdue[i].id}`);
+            break;
+        }
+
+        totalPossiblePoints += agdue[i].points_possible;
+    
+    }
+
+    return totalPossiblePoints
 
 }
 
@@ -371,32 +382,3 @@ function getLearnerData(course, ag, submissions) {
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 console.log(result);
 
-
-
-
-
-// function getLearnerData(course, ag, submissions) {
-//     // here, we would process this data to achieve the desired result.
-//     const result = [
-//         {
-//         id: 125,
-//         avg: 0.985, // (47 + 150) / (50 + 150)
-//         1: 0.94, // 47 / 50
-//         2: 1.0 // 150 / 150
-//         },
-//         {
-//         id: 132,
-//         avg: 0.82, // (39 + 125) / (50 + 150)
-//         1: 0.78, // 39 / 50
-//         2: 0.833 // late: (140 - 15) / 150
-//         }
-//     ];
-
-//     return result;
-// }
-
-
-//////////////////////////////////////////////////////////
-// const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-
-// console.log(result);
