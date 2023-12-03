@@ -2,17 +2,15 @@
 
 ## Description
 
-brief description
+_This is a skilled-based assessment project for the Per Scholas Software Engineering Bootcamp._
 
-## Usage
-
-explain the usage
+This JavaScript project built a function `getLearnerData(course, ag, submissions)` that processes structured data related to course, assignments, and learner submissions. It showcases JavaScript control flow, data collection and organization, and error handling. The output is an array of objects containing the assignment score details for each learner.
 
 ## Input
 
 The `getLearnerData` function takes three parameters:
 
-1. **course:** an object representing course information.
+1. **course(`CourseInfo`):** an object representing course information.
 
 ```javascript
 const CourseInfo = {
@@ -21,7 +19,7 @@ const CourseInfo = {
 }
 ```
 
-2. **ag:** an object representing the information of an assignment group.
+2. **ag(`AssignmentGroup`):** an object representing the information of an assignment group.
 
 ```javascript
 const AssignmentGroup = {
@@ -42,7 +40,7 @@ const AssignmentGroup = {
 };
 ```
 
-3. **submissions:** an array of LearnerSubmission objects.
+3. **submissions(`LearnerSubmissions`):** an array of LearnerSubmission objects.
 
 ```javascript
 const LearnerSubmissions = [
@@ -72,11 +70,37 @@ The `getLearnerData` function returns an array of objects and each object has th
 }
 ```
 
-## Function Details
+Example:
 
-functions
+```javascript
+;[
+  { 1: 0.94, 2: 1, learner_id: 125, avg_score_: 0.985 },
+  { 1: 0.78, 2: 0.833, learner_id: 132, avg_score_: 0.82 },
+]
+```
 
-## Implementation Steps (my solution approach)
+## Error Handling
+
+- If an `AssignmentGroup` doesn't belong to the course provided (mismatching course id), the function throws an error message.
+- If any assignment has a `points_possible` equals to zero, the function throws an error message.
+
+## Function Steps
+
+1. Filters out assignments that haven't reached their due date yet.
+
+2. Flattens learners submissions to simplify processing.
+
+3. Filters out submissions of assignments that are not due yet.
+
+4. Applies a late penalty to late submissions and gets the adjusted submissions (an array of objects).
+
+5. Calculates the total possible points for all assignments that are already due.
+
+6. Calculate the average scores of learners based on the adjusted submissions and stores them along with the corresponding learner id as `LearnerAvg` (an array of objects).
+
+7. Calculates the percentage scores of each submission based on the adjusted submissions and assignment id; stores them along with the corresponding learner's id as `LearnerPct` (an array of objects).
+
+8. Joins `LearnerAvg` and `LearnerPct` into the final result and returns the final result.
 
 ## Author
 
